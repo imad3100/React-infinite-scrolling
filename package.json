@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "./src/index.js",
   "license": "ISC",
-  "homepage": "https://imad3100.github.io/React-quote-generator/",
+  "homepage": "https://imad3100.github.io/React-pagination-demo/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server .",

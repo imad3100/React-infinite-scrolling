@@ -1,53 +1,104 @@
 /* eslint-disable react/button-has-type */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './styles/css/main.css';
-import Posts from './components/Posts';
-import Pagination from './components/Pagination';
 
 function App() {
 
-  const [posts,setPosts]=useState([]) ;
-  const [loading, setloading] = useState(false) ;
-const [currentPage, setCurrentPage] = useState(1) 
+  const [photos, setphotos] = useState([])
+   const [page, setpage] = useState(1)
+   const lastPhoto=useRef()
 
-const postsPerPage =10 ;
-
-
-   function getPosts() {
-    
-    setloading(true) ;
-
-    fetch('https://jsonplaceholder.typicode.com/posts')
-    .then(response => response.json())
-    .then(response => setPosts(response))
-    .catch(err => console.log(err))
-    setloading(false);
-  }
-  function paginate(nbr) {
-    
-    setCurrentPage(nbr) ;
-
-  }
 
   useEffect(()=>{
-    getPosts() ;
 
-  },[])
+    // Fetch random photos 
 
-  console.log(posts);
+    fetch(`https://picsum.photos/v2/list?page=${Math.ceil(Math.random()*100)}&limit=5`)
+    .then(response => response.json())
+.then(data => {
+  // Process the received data
+  console.log(data);
+  setphotos(prevPhotos => [...prevPhotos, ...data]);
 
-  const pagesNbr = Math.ceil( posts.length/postsPerPage) ;
+})
+.catch(error => {
+  console.log('Error:', error);
+});
 
-  const lastPostIdx=currentPage*postsPerPage ;
-  const firstPostIdx=lastPostIdx-postsPerPage ;
-  const currentPosts =posts.slice(firstPostIdx,lastPostIdx)
+  },[page])
+
+
+
+
+
+
+  
+  useEffect(()=>{
+
+      
+      if (lastPhoto.current) 
+  observer.observe(lastPhoto.current);
+  
+
+  },[photos])  ;
+  
+  useEffect(() => {
+console.log('Inside useEffect:', lastPhoto.current)
+ 
+  }, []);
+
+
+  
+
+  const observer = useCallback(
+    new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          console.log('Element is visible');
+          setpage((prevPage) => prevPage + 1);
+        } else {
+          console.log('Element is hidden');
+        }
+      });
+    }),
+    [] // No dependencies needed as observer is only created once
+  );
+
+   
+
 
   return (
     
-    <div className='container col-10'>
-      <Posts posts={currentPosts} loading={loading}  />
-      <Pagination pagesNbr={pagesNbr} paginate={paginate} currentPage={currentPage}/>
-    </div>
+    <div className='container '>
+      {
+        photos.map((photo,index)=>{
+          const imageUrl = photo.download_url;
+console.log(imageUrl);
+          if (index==photos.length-1) {
+
+            return(<div  class="card w-50 mt-5" >
+            <img ref={lastPhoto} src={imageUrl} class="card-img-top" alt="..."/>
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>)
+          }
+
+          return (<div class="card w-50 mt-5" >
+          <img src={imageUrl} class="card-img-top" alt="..."/>
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>)
+
+        })
+
+      }
+       </div>
     
   );
 }
