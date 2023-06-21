@@ -69,14 +69,14 @@ console.log('Inside useEffect:', lastPhoto.current)
 
   return (
     
-    <div className='container '>
+    <div className='container  '>
       {
         photos.map((photo,index)=>{
           const imageUrl = photo.download_url;
 console.log(imageUrl);
           if (index==photos.length-1) {
 
-            return(<div  class="card w-50 mt-5" >
+            return(<div  class="card  mt-5 mx-auto " >
             <img ref={lastPhoto} src={imageUrl} class="card-img-top" alt="..."/>
             <div class="card-body">
               <h5 class="card-title">Card title</h5>
@@ -86,7 +86,7 @@ console.log(imageUrl);
           </div>)
           }
 
-          return (<div class="card w-50 mt-5" >
+          return (<div class="card col-8 col-sm-6 mt-5 mx-auto " >
           <img src={imageUrl} class="card-img-top" alt="..."/>
           <div class="card-body">
             <h5 class="card-title">Card title</h5>
