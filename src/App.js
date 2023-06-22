@@ -13,7 +13,7 @@ function App() {
 
     // Fetch random photos 
 
-    fetch(`https://picsum.photos/v2/list?page=${Math.ceil(Math.random()*100)}&limit=5`)
+    fetch(`https://picsum.photos/v2/list?page=${Math.ceil(Math.random()*100)}&limit=3`)
     .then(response => response.json())
 .then(data => {
   // Process the received data
